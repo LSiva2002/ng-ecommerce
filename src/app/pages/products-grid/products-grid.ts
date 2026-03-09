@@ -1,10 +1,26 @@
 import { Component, signal } from '@angular/core';
 import { Product } from '../../models/product';
 import { input } from '@angular/core';
+import { computed } from '@angular/core';
+import { ProductCard } from '../../components/product-card/product-card';
+import { MatSidenav } from '@angular/material/sidenav';
+import { MatSidenavContent } from '@angular/material/sidenav';
+import { MatSidenavContainer } from '@angular/material/sidenav';
+import { MatListItem, MatNavList } from '@angular/material/list';
+import { RouterLink } from '@angular/router';
+import { TitleCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-products-grid',
-  imports: [],
+  imports: [
+    ProductCard,
+    MatSidenav,
+    MatSidenavContent,
+    MatNavList,
+    MatListItem,
+    MatSidenavContainer,
+    RouterLink,
+    TitleCasePipe],
   templateUrl: './products-grid.html',
   styleUrl: './products-grid.scss',
 })
@@ -22,18 +38,18 @@ export default class ProductsGrid {
       rating: 4.5,
       reviewCount: 120,
       inStock: true,
-      category: "Electronics"
+      category: "electronics"
     },
     {
       id: "2",
       name: "Smart Watch",
       price: 4999,
       description: "Track your fitness, heart rate, and notifications.",
-      image: "https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b",
+      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=800&auto=format&fit=crop",
       rating: 4.3,
       reviewCount: 85,
       inStock: true,
-      category: "Electronics"
+      category: "electronics"
     },
     {
       id: "3",
@@ -44,7 +60,7 @@ export default class ProductsGrid {
       rating: 4.6,
       reviewCount: 210,
       inStock: true,
-      category: "Footwear"
+      category: "footwear"
     },
     {
       id: "4",
@@ -55,7 +71,7 @@ export default class ProductsGrid {
       rating: 4.2,
       reviewCount: 64,
       inStock: true,
-      category: "Accessories"
+      category: "accessories"
     },
     {
       id: "5",
@@ -66,7 +82,7 @@ export default class ProductsGrid {
       rating: 4.7,
       reviewCount: 150,
       inStock: true,
-      category: "Electronics"
+      category: "electronics"
     },
     {
       id: "6",
@@ -77,18 +93,18 @@ export default class ProductsGrid {
       rating: 4.4,
       reviewCount: 45,
       inStock: true,
-      category: "Accessories"
+      category: "accessories"
     },
     {
       id: "7",
       name: "Bluetooth Speaker",
       price: 3499,
       description: "Portable speaker with deep bass and long battery life.",
-      image: "https://images.unsplash.com/photo-1585386959984-a4155223166c",
+      image: "https://images.unsplash.com/photo-1545454675-3531b543be5d?q=80&w=800",
       rating: 4.5,
       reviewCount: 92,
       inStock: true,
-      category: "Electronics"
+      category: "electronics"
     },
     {
       id: "8",
@@ -99,9 +115,23 @@ export default class ProductsGrid {
       rating: 4.1,
       reviewCount: 38,
       inStock: true,
-      category: "Fashion"
+      category: "fashion"
     }
   ]);
 
+  filteredProducts = computed(() => {
+    if (this.category() === 'all') {
+      return this.products();
+    }
+    return this.products().filter(p => p.category === this.category().toLowerCase());
+  });
 
+
+  categories = signal<string[]>([
+    "all",
+    "electronics",
+    "footwear",
+    "accessories",
+    "fashion"
+  ]);
 }
